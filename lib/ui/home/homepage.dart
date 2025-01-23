@@ -2,20 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/bloc/todo/todo_event.dart';
 import 'package:todo_app/bloc/todo/todo_state.dart';
-import 'package:todo_app/model/todo_model.dart';
-import 'package:todo_app/ui/widget/date/pick/date_pick.dart';
-import '../../bloc/pickdate/pickdate_bloc.dart';
+import 'package:todo_app/ui/widget/date/pick/day/day_pick.dart';
+import '../../bloc/day_pick/daypick_bloc.dart';
 import '../../bloc/todo/todo_bloc.dart';
-import '../widget/intl/date/date_format.dart';
+import '../widget/add/add_todo.dart';
+import '../widget/date/pick/time/time_pick.dart';
+import '../widget/slidable/slidable_widget.dart';
 
 class Homepage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final state = context.read<DayPickerBloc>().state;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Todo App'),
+        title: Text('${state.selectedDay.toLocal()}'),
         actions: [
           const DatePickWidget(),
+          const TimePickWidget(),
         ],
       ),
       body: BlocBuilder<TodoBloc, TodoState>(
@@ -32,14 +36,12 @@ class Homepage extends StatelessWidget {
               itemCount: state.todoList.length,
               itemBuilder: (context, index) {
                 final item = state.todoList[index];
-                return ListTile(
-                  title: Text(item.title),
-                  subtitle: Text(item.date),
-                  trailing: IconButton(
-                    icon: Icon(Icons.delete),
-                    onPressed: () => context
-                        .read<TodoBloc>()
-                        .add(DeleteTodoEvent(id: item.id!)),
+                return SlidableWidget(
+                  item: item,
+                  id: item.id!,
+                  child: ListTile(
+                    title: Text(item.title),
+                    subtitle: Text(item.date),
                   ),
                 );
               },
@@ -53,58 +55,11 @@ class Homepage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _showAddItemDialog(context);
+          showAddItemDialog(context);
         },
         child: Icon(Icons.add),
       ),
     );
   }
 
-  void _showAddItemDialog(BuildContext context) {
-    final titleController = TextEditingController();
-    final descriptionController = TextEditingController();
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Add Item'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: titleController,
-                decoration: InputDecoration(labelText: 'Name'),
-              ),
-              TextField(
-                controller: descriptionController,
-                decoration: InputDecoration(labelText: 'Description'),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                final item = TodoModel(
-                  title: titleController.text,
-                  description: descriptionController.text,
-                  date: formatDateTime(
-                    context.read<DatePickerBloc>().state.selectedDate,
-                  ), // Bloc orqali tanlangan sana
-                  isCompleted: true,
-                );
-                context.read<TodoBloc>().add(AddTodoEvent(item));
-                Navigator.of(context).pop();
-              },
-              child: Text('Add'),
-            ),
-          ],
-        );
-      },
-    );
-  }
 }
