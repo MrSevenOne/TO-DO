@@ -3,14 +3,16 @@ class TodoModel {
   final String title;
   final String description;
   final bool isCompleted;
-  final String date;
+  final String day;
+  final String time;
 
   TodoModel({
     this.id,
     required this.title,
     required this.description,
     required this.isCompleted,
-    required this.date,
+    required this.day,
+    required this.time
   });
 
   // Convert a TodoModel into a Map
@@ -19,8 +21,9 @@ class TodoModel {
       'id': id,
       'title': title,
       'description': description,
-      'isCompleted': isCompleted ? 1 : 0,
-      'date': date,
+      'isCompleted': isCompleted ? 0 : 1,
+      'day': day,
+      'time': time
     };
   }
 
@@ -31,7 +34,8 @@ class TodoModel {
       title: map['title'],
       description: map['description'],
       isCompleted: map['isCompleted'] == 1,
-      date: map['date'],
+      day: map['day'],
+      time: map['time']
     );
   }
 }

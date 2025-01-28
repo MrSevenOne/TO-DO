@@ -6,7 +6,6 @@ import 'package:todo_app/ui/widget/date/pick/day/day_pick.dart';
 import '../../bloc/day_pick/daypick_bloc.dart';
 import '../../bloc/todo/todo_bloc.dart';
 import '../widget/add/add_todo.dart';
-import '../widget/date/pick/time/time_pick.dart';
 import '../widget/slidable/slidable_widget.dart';
 
 class Homepage extends StatelessWidget {
@@ -19,7 +18,6 @@ class Homepage extends StatelessWidget {
         title: Text('${state.selectedDay.toLocal()}'),
         actions: [
           const DatePickWidget(),
-          const TimePickWidget(),
         ],
       ),
       body: BlocBuilder<TodoBloc, TodoState>(
@@ -40,8 +38,23 @@ class Homepage extends StatelessWidget {
                   item: item,
                   id: item.id!,
                   child: ListTile(
+                    leading: Checkbox(
+                      value: item.isCompleted,
+                      onChanged: (bool? newValue) {
+                        final todoId = item.id; // item id
+                        final isCompleted = newValue ?? false;
+                        // Blocga event yuborish
+                        context.read<TodoBloc>().add(
+                              UpdateTodoStatusEvent(
+                                id: item.id!,
+                                isCompleted: isCompleted,
+                              ),
+                            );
+                        print('Item ID: $todoId, isCompleted: $isCompleted');
+                      },
+                    ),
                     title: Text(item.title),
-                    subtitle: Text(item.date),
+                    subtitle: Text(item.day),
                   ),
                 );
               },
@@ -61,5 +74,4 @@ class Homepage extends StatelessWidget {
       ),
     );
   }
-
 }

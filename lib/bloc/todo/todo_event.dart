@@ -21,3 +21,10 @@ class DeleteTodoEvent extends TodoEvent {
 
   DeleteTodoEvent({required this.id});
 }
+
+class UpdateTodoStatusEvent extends TodoEvent {
+  final int id;
+  final bool isCompleted;
+
+  UpdateTodoStatusEvent({required this.id, required this.isCompleted});
+}

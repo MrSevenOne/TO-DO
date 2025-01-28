@@ -5,8 +5,9 @@ import 'package:todo_app/bloc/time_pick/picktime_state.dart';
 
 class TimePickBloc extends Bloc<TimePickEvent, TimepickState> {
   TimePickBloc() : super(TimepickState(selectedTime: TimeOfDay.now())) {
-    on<TimePickEvent>((event, emit) {
-      emit(state.copyWith(selectedTime: state.selectedTime));
+    on<SelectTimeEvent>((event, emit) {
+      // Yangi tanlangan vaqtni state ichiga saqlaymiz
+      emit(state.copyWith(selectedTime: event.selecttime));
     });
   }
 }

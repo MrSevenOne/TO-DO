@@ -31,7 +31,8 @@ class DataBaseHelper {
         title TEXT, 
         description TEXT,
         isCompleted INTEGER,
-        date TEXT
+        day TEXT,
+        time TEXT
       )
       ''');
   }
@@ -58,6 +59,16 @@ class DataBaseHelper {
       item.toJson(),
       where: 'id = ?',
       whereArgs: [item.id],
+    );
+  }
+
+  Future<void> updateTodoStatus(int id, bool isCompleted) async {
+    final db = await database;
+    await db.update(
+      'items',
+      {'isCompleted': isCompleted ? 1 : 0}, // 1 - true, 0 - false
+      where: 'id = ?',
+      whereArgs: [id],
     );
   }
 

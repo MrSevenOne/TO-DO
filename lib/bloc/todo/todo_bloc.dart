@@ -11,6 +11,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     on<AddTodoEvent>(_onAddTodo);
     on<UpdateTodoEvent>(_onUpdateTodo);
     on<DeleteTodoEvent>(_onDeleteTodo);
+    on<UpdateTodoStatusEvent>(_onUpdateStatusTodo);
   }
 
   Future<void> _onLoadTodo(LoadTodoEvent event, Emitter<TodoState> emit) async {
@@ -48,5 +49,18 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
       emit(ErrorTodoState("Error DeleteItem $e"));
     }
   }
-}
+  Future<void> _onUpdateStatusTodo(UpdateTodoStatusEvent event, Emitter<TodoState> emit) async {
+    try {
+      // isCompleted maydonini yangilash
+      await databaseHelper.updateTodoStatus(event.id, event.isCompleted);
+
+      // Yangilangan to'liq todos ro'yxatini qaytarish
+      add(LoadTodoEvent());
+    } catch (e) {
+      emit(ErrorTodoState("Error Update Todo Status $e"));
+    }
+  }
+
+  }
+
 

@@ -13,7 +13,6 @@ class TimePickWidget extends StatelessWidget {
       builder: (context, state) {
         return IconButton(
           onPressed: () {
-            // Sana tanlash oynasini ko'rsatish uchun event yuboriladi
             showTimePicker(
               context: context, initialTime: TimeOfDay.now(),
             ).then((selectedTime) {

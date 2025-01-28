@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../../../../bloc/day_pick/daypick_bloc.dart';
 import '../../../../../bloc/day_pick/daypick_event.dart';
 import '../../../../../bloc/day_pick/daypick_state.dart';

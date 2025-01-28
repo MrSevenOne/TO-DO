@@ -37,7 +37,8 @@ void showUpdateItemDialog(BuildContext context, TodoModel todoModel) {
               title: titleController.text,
               description: descriptionController.text,
               isCompleted: todoModel.isCompleted,
-              date: todoModel.date,
+              day: todoModel.day,
+              time: ''
             );
             context.read<TodoBloc>().add(UpdateTodoEvent(updatedTodo));
             Navigator.pop(context);
